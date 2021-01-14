@@ -11,15 +11,22 @@
 typedef struct AMediaCodec AMediaCodec;
 typedef struct ANativeWindow ANativeWindow;
 
+#define ANDROID_CHIAKI_VIDEO_DECODER_FRAME_BUFFER_SIZE 4
+
 typedef struct android_chiaki_video_decoder_t
 {
 	ChiakiLog *log;
 	ChiakiMutex codec_mutex;
+	uint8_t *bufs[ANDROID_CHIAKI_VIDEO_DECODER_FRAME_BUFFER_SIZE];
+	size_t bufs_sizes[ANDROID_CHIAKI_VIDEO_DECODER_FRAME_BUFFER_SIZE];
+	size_t bufs_count;
+	ChiakiCond bufs_cond;
 	AMediaCodec *codec;
 	ANativeWindow *window;
 	uint64_t timestamp_cur;
+	ChiakiThread input_thread;
 	ChiakiThread output_thread;
-	bool shutdown_output;
+	bool shutdown;
 	int32_t target_width;
 	int32_t target_height;
 	ChiakiCodec target_codec;
