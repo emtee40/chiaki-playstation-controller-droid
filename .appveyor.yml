@@ -4,6 +4,7 @@ image:
 
 branches:
   only:
+    - gui-haptics2
     - master
     - develop
     - /^v\d.*$/
